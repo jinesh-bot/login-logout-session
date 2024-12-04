@@ -31,7 +31,7 @@ app.get('/',(req,res)=>{
             res.render('login',{msg:"invalid credentials" })
            req.session.passwordwrong=false 
         }else{
-            res.render('login')
+            res.render('login', {})
         }
         
     }
@@ -40,11 +40,11 @@ app.get('/',(req,res)=>{
 
 app.post('/verify',(req,res)=>{
 
-    console.log(req.body);
 
     if(req.body.username===username && req.body.password===password){
         
         req.session.user=req.body.username
+        req.session.password = req.body.password
         res.redirect('/home')
     }
     else{
@@ -56,10 +56,9 @@ app.post('/verify',(req,res)=>{
     }
 })
 app.get('/home',(req,res)=>{
-    // res.send(req.body.username)
     if(req.session.user){
-
-        res.render('home')
+        console.log(req.session)
+        res.render('home',{username:`${req.session.user}`,password:`${req.session.password}` })
     }else{
         if(req.session.passwordwrong){
             req.session.passwordwrong=false
